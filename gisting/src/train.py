@@ -168,10 +168,11 @@ def main(args: DictConfig) -> None:
             cache_dir=args.model.cache_dir,
             revision=args.model.model_revision,
             use_auth_token=True if args.model.use_auth_token else None,
+            torch_dtype=torch.bfloat16
         )
     else:
         model = model_cls(config)
-
+    
     # ==== BEGIN GIST CHANGES ====
     # Check if gist token has already been added to the model (e.g. because
     # we're resuming from a checkpoint.)
@@ -282,6 +283,18 @@ def main(args: DictConfig) -> None:
         custom_callbacks.append(CustomWandbCallback(args))
     if args.training.evaluate_before_train:
         custom_callbacks.append(EvaluateFirstStepCallback())
+    
+    def print_trainable_parameters(model): 
+        total_params = 0
+        trainable = 0
+        for p in model.parameters(): 
+            if p.requires_grad: 
+                trainable += p.numel() 
+            total_params += p.numel() 
+        
+        print(f"# ==== TRAINABLE PARAMS: {trainable:,} / {total_params:,} ==== #")
+
+    print_trainable_parameters(model)
 
     trainer = GistSeq2SeqTrainer(
         model=model,
@@ -297,6 +310,7 @@ def main(args: DictConfig) -> None:
         callbacks=custom_callbacks,
     )
 
+    
     # Training
     if args.training.do_train:
         checkpoint = None

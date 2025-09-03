@@ -11,6 +11,5 @@ openai==0.27.2
 rouge_score==0.1.2
 nltk==3.6.2
 sentencepiece==0.1.98
-torch==2.0.0
 git+https://github.com/huggingface/transformers@fb366b9a
 wandb==0.13.4

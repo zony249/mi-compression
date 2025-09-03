@@ -2,7 +2,7 @@
 #SBATCH --job-name=gist
 #SBATCH --ntasks=1
 #SBATCH --mem=480gb
-#SBATCH --time=26:00:00
+#SBATCH --time=3-00:00
 #SBATCH --output=gist.log
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
@@ -14,7 +14,7 @@
 # hours. You can probably get away with training FLAN-T5-XXL less.
 
 
-TAG="test"
+TAG="llama-1tok"
 
 port=$(shuf -i25000-30000 -n1)
 
