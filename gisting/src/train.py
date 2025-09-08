@@ -44,6 +44,12 @@ from .integrations import CustomWandbCallback, EvaluateFirstStepCallback
 from .metrics import get_compute_metrics_fn
 from .trainer_seq2seq import GistSeq2SeqTrainer
 
+from peft import (
+    LoraConfig, 
+    get_peft_model
+)
+
+
 # Will error if the minimal version of Transformers is not installed. Remove at
 # your own risks.
 check_min_version("4.28.0.dev0")
@@ -294,7 +300,19 @@ def main(args: DictConfig) -> None:
         
         print(f"# ==== TRAINABLE PARAMS: {trainable:,} / {total_params:,} ==== #")
 
+
+    lora_conf = LoraConfig(
+        r=32, 
+        lora_alpha=32,
+        target_modules=["gate_proj", "down_proj", "up_proj", "q_proj", "v_proj", "k_proj", "o_proj"],
+        lora_dropout=0.1,
+        bias="none",
+        task_type="CAUSAL_LM" if is_llama else "SEQ_2SEQ_LM"
+    )
+    model = get_peft_model(model, lora_conf)
+
     print_trainable_parameters(model)
+
 
     trainer = GistSeq2SeqTrainer(
         model=model,

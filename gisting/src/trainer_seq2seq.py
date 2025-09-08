@@ -311,9 +311,9 @@ class GistSeq2SeqTrainer(Seq2SeqTrainer):
                 eos_token_id=2,
                 pad_token_id=0,
             )
-
+        print("GENERATION INPUTS:", generation_inputs)
         generated_tokens = self.model.generate(
-            generation_inputs,
+            input_ids=generation_inputs,
             **gen_kwargs,
         )
         if not is_encoder_decoder:
