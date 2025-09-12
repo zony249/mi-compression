@@ -17,7 +17,9 @@ def reverse_cumsum(x: torch.Tensor) -> torch.Tensor:
         A tensor of shape (batch_size, seq_len) where each element is the sum of
         all elements to the right of it.
     """
-    return x + torch.sum(x, dim=-1, keepdims=True) - torch.cumsum(x, dim=-1)
+    if not isinstance(x, torch.Tensor):
+        raise ValueError("x must be a torch.Tensor")
+    return x + torch.sum(x, keepdim=True, dim=-1) - torch.cumsum(x, dim=-1)
 
 
 def make_mask_pre_first_gist(

@@ -98,7 +98,7 @@ class GistTrainingArguments(TrainingArguments):
     max_benchmarking_samples: Optional[int] = 256
 
     # Change these types to strs so that they typecheck with str configs
-    evaluation_strategy: Optional[str] = "no"
+    evaluation_strategy: Optional[str] = "steps"
     lr_scheduler_type: Optional[str] = "linear"
     logging_strategy: Optional[str] = "steps"
     save_strategy: Optional[str] = "steps"

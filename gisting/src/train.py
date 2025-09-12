@@ -65,7 +65,7 @@ logger = logging.getLogger(__name__)
 @hydra.main(config_path="conf", config_name="config")
 def main(args: DictConfig) -> None:
     args: Arguments = global_setup(args)
-
+    print(args)
     # Detecting last checkpoint.
     last_checkpoint = None
     if (
@@ -310,6 +310,7 @@ def main(args: DictConfig) -> None:
         task_type="CAUSAL_LM" if is_llama else "SEQ_2SEQ_LM"
     )
     model = get_peft_model(model, lora_conf)
+    model.model.model.embed_tokens.requires_grad_(True)
 
     print_trainable_parameters(model)
 

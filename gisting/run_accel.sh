@@ -2,11 +2,11 @@
 #SBATCH --job-name=gist
 #SBATCH --ntasks=1
 #SBATCH --mem=480gb
-#SBATCH --time=3-00:00
+#SBATCH --time=0-12:00
 #SBATCH --output=gist.log
 #SBATCH --cpus-per-task=16
-#SBATCH --gpus-per-node=h100:4
-#SBATCH --account=rrg-lilimou
+#SBATCH --gpus-per-node=l40s:4
+#SBATCH --account=aip-lilimou
 
 # This script can either be used interactively or submitted to SLURM with
 # sbatch.
@@ -25,7 +25,7 @@ TAG="llama-1tok"
 
 port=$(shuf -i25000-30000 -n1)
 
-env/bin/python3.10 -m debugpy --listen 0.0.0.0:45678 -m accelerate.commands.launch \
+accelerate launch \
     --num_processes 4 \
     --num_machines 1 \
     --main_process_port $port \
@@ -35,4 +35,10 @@ env/bin/python3.10 -m debugpy --listen 0.0.0.0:45678 -m accelerate.commands.laun
     -m src.train \
         +model=llama-7b wandb.tag=$TAG \
         training.gist.condition=gist \
-        training.gist.num_gist_tokens=1
+        training.gist.num_gist_tokens=1 \
+        training.evaluation_strategy="steps" \
+        training.eval_steps=1000 \
+        training.save_steps=1000 \
+        training.per_device_train_batch_size=1 \
+        training.gradient_accumulation_steps=64 \
+        training.learning_rate=2e-5 \
