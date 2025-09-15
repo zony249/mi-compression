@@ -103,4 +103,5 @@ class AlpacaPlus(datasets.GeneratorBasedBuilder):
             task_json = json.load(split_f)
             for idx, instance in enumerate(task_json):
                 instance["split"] = split
+                # print(instance)
                 yield f"alpaca_{split}_{idx}", instance

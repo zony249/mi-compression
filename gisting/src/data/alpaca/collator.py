@@ -142,7 +142,6 @@ class DataCollatorForAlpaca:
             )
         else:
             raise ValueError(f"Invalid gist_condition: {self.gist_condition}")
-
         return model_inputs
 
 
@@ -176,6 +175,8 @@ class DataCollatorForAlpacaCLM:
         if return_tensors is None:
             return_tensors = self.return_tensors
 
+        # print(batch)
+
         model_inputs = defaultdict(list)
         for instance in batch:
             if not self.add_gist_token:
@@ -190,7 +191,9 @@ class DataCollatorForAlpacaCLM:
                 prompt = f"Instruction: {instance['instruction']}\n{maybe_gist_str}\nInput: {instance['input']}\nOutput:"  # noqa
             else:
                 prompt = f"Instruction: {instance['instruction']}\n{maybe_gist_str}\nOutput:"  # noqa
+            # New addition: if output is empty, put in the word "empty."
             completion = f"{instance['output']}"
+            print(f"Prompt: {prompt}\nCompletion: {completion}\n---")
 
             tokenized_prompt = self.tokenizer(prompt)["input_ids"]
             tokenized_completion = self.tokenizer(completion, add_special_tokens=False)[
@@ -283,5 +286,6 @@ class DataCollatorForAlpacaCLM:
             model_inputs["prompt_input_ids"],
             self.gist_token,
         )
+        # print(model_inputs)
 
         return model_inputs
