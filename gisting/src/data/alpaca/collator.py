@@ -193,7 +193,7 @@ class DataCollatorForAlpacaCLM:
                 prompt = f"Instruction: {instance['instruction']}\n{maybe_gist_str}\nOutput:"  # noqa
             # New addition: if output is empty, put in the word "empty."
             completion = f"{instance['output']}"
-            print(f"Prompt: {prompt}\nCompletion: {completion}\n---")
+            # print(f"Prompt: {prompt}\nCompletion: {completion}\n---")
 
             tokenized_prompt = self.tokenizer(prompt)["input_ids"]
             tokenized_completion = self.tokenizer(completion, add_special_tokens=False)[
