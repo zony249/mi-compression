@@ -302,15 +302,15 @@ def main(args: DictConfig) -> None:
 
 
     lora_conf = LoraConfig(
-        r=32, 
+        r=256, 
         lora_alpha=32,
-        target_modules=["gate_proj", "down_proj", "up_proj", "q_proj", "v_proj", "k_proj", "o_proj"],
+        target_modules=["gate_proj", "down_proj", "up_proj", "q_proj", "v_proj", "k_proj", "o_proj", "embed_tokens"] if is_llama else ["q", "k", "v", "o", "wi", "wo"],
         lora_dropout=0.1,
         bias="none",
         task_type="CAUSAL_LM" if is_llama else "SEQ_2SEQ_LM"
     )
     model = get_peft_model(model, lora_conf)
-    model.model.model.embed_tokens.requires_grad_(True)
+    # model.model.model.embed_tokens.requires_grad_(True)
 
     print_trainable_parameters(model)
 
