@@ -5,7 +5,6 @@
     "version": "0.2.0",
     "configurations": [
 
-
         {
             "name": "Python Debugger: Attach",
             "type": "debugpy",
@@ -21,12 +20,16 @@
             "type": "debugpy",
             "request": "launch",
             "module": "accelerate.commands.launch",
+            "env": {
+                "HYDRA_FULL_ERROR": "1",
+                "CUDA_VISIBLE_DEVICES": "5,6"
+            },
             "args": [
-                "--num_processes=4",
+                "--num_processes=2",
                 "--num_machines=1",
                 "--main_process_port", "29500",
                 "-m", "src.train",
-                    "+model=llama-7b",
+                    "+model=flan-t5-base",
                     "wandb.tag=debug",
                     "training.gist.condition=gist",
                     "training.evaluation_strategy=steps",
@@ -36,6 +39,8 @@
                     "training.learning_rate=2e-5",
                     "training.gist.num_gist_tokens=1"
             ],
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/gisting",
             "console": "integratedTerminal"
         }
 

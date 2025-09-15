@@ -19,12 +19,13 @@
 # export NCCL_DEBUG=INFO
 
 export HYDRA_FULL_ERROR=1
+export CUDA_VISIBLE_DEVICES=5,6
 
 TAG="llama-1tok"
 
 port=$(shuf -i25000-30000 -n1)
 
-deepspeed --master_port $port --num_gpus=4 --no_local_rank \
+deepspeed --master_port $port --num_gpus=2 --no_local_rank \
     --module src.train \
     +model=llama-7b wandb.tag=$TAG \
     training.deepspeed=ds_configs/stage3.json \

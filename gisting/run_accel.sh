@@ -18,6 +18,7 @@
 # export NCCL_SOCKET_IFNAME=br01 # for me it is 'br0' interface, you should use yours :)
 # export NCCL_P2P_DISABLE=1
 # export NCCL_DEBUG=INFO
+export CUDA_VISIBLE_DEVICES=3,4,5,6
 
 export HYDRA_FULL_ERROR=1
 
@@ -39,6 +40,6 @@ accelerate launch \
         training.evaluation_strategy="steps" \
         training.eval_steps=1000 \
         training.save_steps=1000 \
-        training.per_device_train_batch_size=1 \
+        training.per_device_train_batch_size=2 \
         training.gradient_accumulation_steps=64 \
         training.learning_rate=2e-5 \
